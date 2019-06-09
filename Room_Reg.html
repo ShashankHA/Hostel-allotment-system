@@ -1,0 +1,234 @@
+<html>
+<head>
+<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.2/firebase-database.js"></script>
+
+<script>
+	var config = 
+			  {
+				apiKey: "AIzaSyAmhpgI3Tc-FmOAjXQJUYdoELV5fErcOis",
+				authDomain: "databaseapp-bee9d.firebaseapp.com",
+				databaseURL: "https://databaseapp-bee9d.firebaseio.com",
+				projectId: "databaseapp-bee9d",
+				storageBucket: "databaseapp-bee9d.appspot.com",
+				messagingSenderId: "419802387428"
+			  };
+			  firebase.initializeApp(config);
+	var id = localStorage.getItem('id');
+	
+	function checkReg(){
+		return firebase.database().ref('/users/' + id).once('value').then(function(snapshot) 
+		{
+			var reg_status = (snapshot.val() && snapshot.val().Room_reg);
+			if(reg_status===1)
+			{
+				document.getElementById("R_no").disabled = true;
+				document.getElementById("myList").disabled = true;
+				document.getElementById("myList1").disabled = true;
+				document.getElementById("myList2").disabled = true;
+				document.getElementById("reg_button").disabled = true;
+				
+				var x = document.getElementById("result_fail");
+					if (x.style.display === "none") {
+						x.innerHTML = "Your registeration is already done, contact admin for any queries."
+						x.style.display = "block";
+					} else {
+						x.style.display = "none";
+					}
+				setTimeout(function(){
+					location.href = "Dashboard.html";
+				}, 2500);
+			}
+		});
+	}
+	
+	function register()
+	{
+		var rec_no,C1,C2,C3;
+		 
+		rec_no=document.getElementById("R_no").value.toString();
+		
+		var e = document.getElementById("myList");
+		var C1 = e.options[e.selectedIndex].text;
+		
+		var e = document.getElementById("myList1");
+		var C2 = e.options[e.selectedIndex].text;
+		
+		var e = document.getElementById("myList2");
+		var C3 = e.options[e.selectedIndex].text;
+		
+		if(rec_no.length==0||C1.length==0||C2==0||C3==0)
+		{
+			var x = document.getElementById("result_fail");
+			if (x.style.display === "none") {
+				x.innerHTML = "Please fill all fields"
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		}
+		else
+		{
+			return firebase.database().ref('/users/' + id).once('value').then(function(snapshot) 
+			{
+				firebase.database().ref("users").child(id).update({C1:C1,C2:C2,C3:C3,rec_no:rec_no,Room_reg:1,Room_No:' '});
+				
+				var x = document.getElementById("result_success");
+				if (x.style.display === "none") {
+					x.style.display = "block";
+				} else {
+					x.style.display = "none";
+				}
+				setTimeout(function(){
+					location.href = "Dashboard.html";
+				}, 4000);
+				
+			});
+		}
+	}
+	
+	function loaddata(){
+		var id = localStorage.getItem('id');
+		return firebase.database().ref('/users/' + id).once('value').then(function(snapshot) 
+		{
+			var name = (snapshot.val() && snapshot.val().name);
+			document.getElementById("name-banner").innerHTML = name;
+			document.getElementById("er-banner").innerHTML = id;
+		});
+	}
+	window.onload = loaddata();
+	
+	function goToDash()
+	{	
+		window.location="Dashboard.html";
+	}
+	
+	window.onload = checkReg();
+</script>	
+
+<script>
+window.onload = func;
+function func(){
+	var m = document.getElementById("myList");
+	for(var i=1;i<28;i++)
+	{
+	var opt = document.createElement("option");
+	opt.text = i;
+	m.add(opt);
+	}
+	
+	var m = document.getElementById("myList1");
+	for(var i=1;i<28;i++)
+	{
+	var opt = document.createElement("option");
+	opt.text = i;
+	m.add(opt);
+	}
+	var m = document.getElementById("myList2");
+	for(var i=1;i<28;i++)
+	{
+	var opt = document.createElement("option");
+	opt.text = i;
+	m.add(opt);
+	}
+}
+
+
+</script>
+
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> 
+<style>
+	.uni-head{
+		color:#00204E;
+	} 
+</style>
+</head>
+<body>
+	<div class=".container text-center" style="font-family:Maven Pro; color:white">
+		<div class="card card-block d-flex" style="height:20%;border: none; background:url(Images/gradient.jpg)no-repeat center; margin:25px; box-shadow:10px 10px 50px rgba(0,0,0,0.25)">
+			<div class="row" style="height:100%; ">
+				<div class="col-lg-2">
+					<img src="Images/Stratford.png" height = "100%" style=" display: block; height: 100%;margin-left:25px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; float:none">
+				</div>
+				<div class="col-lg-10 px-3 text-right my-auto" >
+					<div class="card-body align-items-center justify-content-center" >
+						<h2 class="card-title" id="name-banner"> </h2>
+						<h3 id = "er-banner"><small></small></h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=".container text-center" style="width:95%; margin:0 auto; font-family:Maven Pro;">
+		<div class="row" style ="width:100%">	
+			<div class="col">
+				<canvas id="myCanvas" width="400" height="400" style="border:3px solid #c3c3c3;right-margin:30px;">
+				<script src="grapics.js"></script>
+			</div>
+			<div class="col">
+				<table class="table borderless">
+					<thead>
+					</thead>
+					<tbody>
+						<tr>
+							<th><label for="text" style="font-size:25">Receipt No:</label></th>
+							<th><input type="text" class="form-control form-control-lg" id="R_no"  placeholder="Receipt No"></th>
+						</tr>
+						<tr>
+							<th><label for="text" style="font-size:25">Choice 1:</label></th>
+							<td>
+								<select id="myList" class="form-control">
+									<option>       </option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th><label for="text" style="font-size:25">Choice 2:</label></th>
+							<td>
+								<select id="myList1"class="form-control">
+									<option>       </option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th><label for="text" style="font-size:25">Choice 3:</label></th>
+							<td>
+								<select id="myList2" class="form-control">
+									<option>       </option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<div class="alert alert-success" id="result_success" style="display:none">
+								<strong>Room registration complete </strong>Please contact admin for queries.	
+							</div>
+							<div class="alert alert-danger" id="result_fail" style="display:none">
+							</div>
+						</tr>
+					</tbody>
+				</table>
+			</div>		
+		</div>	
+		<br>
+		<button type="button" class="btn btn-outline" style="color:#04429c; width:25%" onclick="goToDash()"><b>Cancel</b></button>
+		<button type="button" class="btn btn-outline" style="color:#04429c; width:25%" onclick="register()" id="reg_button"><b>Register</b></button>
+		<br><br>
+		
+	</div>
+
+</body>
+</html>
